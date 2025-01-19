@@ -1,5 +1,27 @@
 version: '3.8'
 services:
+    java_app:
+      build:
+        context: ./MicroServices/client-crud
+        dockerfile: Dockerfile
+      container_name: pichincha-crud
+      depends_on:
+        - db
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pichincha
+        SPRING_DATASOURCE_USERNAME: pichincha
+        SPRING_DATASOURCE_PASSWORD: ftoapanta
+      ports:
+        - '8081:8081'
+    angular:
+      build:
+        context: ./pichincha-Frontend
+        dockerfile: Dockerfile
+      container_name: pichincha-frontend
+      ports:
+        - '8080:8080'
+      depends_on:
+        - java_app
     db:
       image: postgres:16.1
       container_name: db-pichincha
