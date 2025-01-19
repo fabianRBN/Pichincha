@@ -8,6 +8,7 @@ import { FormsModule ,FormControl , FormGroup, ReactiveFormsModule, Validators} 
 import { MovementService } from '../../core/services/movement/movement.service';
 import { Movement } from '../../core/interfaces/movement.interface';
 import { AccountMovement } from '../../core/interfaces/accountMovement.interface';
+import generatePDF from '../../lib/pdfmake';
 
 @Component({
   selector: 'app-movement',
@@ -170,6 +171,17 @@ export class MovementComponent {
       this.movementsList = response.data
     });
 
+  }
+
+  onGeneratePDF(){
+
+    const reciboNo = '234234234'
+
+    const fecha = '19 de Enero de 2025'
+
+    generatePDF(this.movementsList, reciboNo, fecha);
+
+ 
   }
 
 }

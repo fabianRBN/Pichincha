@@ -8,6 +8,7 @@ import { FormsModule ,FormControl , FormGroup, ReactiveFormsModule, Validators} 
 import { MovementService } from '../../core/services/movement/movement.service';
 import { Movement } from '../../core/interfaces/movement.interface';
 import { AccountMovement } from '../../core/interfaces/accountMovement.interface';
+import generatePDF from '../../lib/pdfmake';
 @Component({
   selector: 'app-report',
   imports: [FormsModule,ReactiveFormsModule],
@@ -22,6 +23,7 @@ export class ReportComponent {
 
   idTitular:string="";
   movementList: AccountMovement[] =[];
+  movementListReporte: AccountMovement[] =[];
   startDate: Date = new Date();
   endDate: Date = new Date();
   page: number = 0;
@@ -77,5 +79,20 @@ export class ReportComponent {
       this.page--;
       this.getMovementfindByDateBetween();
     }
+  }
+
+  onGeneratePDF(){
+
+    const reciboNo = '123456789'
+
+    const fecha = '07 de Marzo de 2024'
+
+    this.movementService.getMovementfindByDateBetween(this.startDate,this.endDate,this.totalElements,0).subscribe(response=>{
+      this.movementListReporte= response.data;
+      generatePDF(this.movementListReporte, reciboNo, fecha);
+   
+    })
+
+ 
   }
 }
