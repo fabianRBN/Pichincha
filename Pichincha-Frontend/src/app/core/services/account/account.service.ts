@@ -1,9 +1,7 @@
-import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { BaseHttpService } from "../base-http.service";
 import { Observable } from "rxjs";
 import { BaseResponse } from "../../interfaces/baseresponse.inteface";
-import { Client } from "../../interfaces/client.interface";
 import { Account } from "../../interfaces/account.interface";
 @Injectable()
 export class AccountService extends BaseHttpService{
