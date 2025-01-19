@@ -1,1 +1,33 @@
-<p>report works!</p>
+<div class="container">
+
+    <div class="search-account">
+        <label for="search">Reporte</label>
+        <br>
+
+    </div>
+
+    <div class="container-card-items">
+
+        <div class="card">
+            <div class="search-account">
+                <label for="search">Cliente</label>
+                <br>
+                <div>
+                    <input class="input-account" type="text" name="search" [(ngModel)]="idTitular" placeholder="Cedula del cliente">
+                    <button value="successful" class="buttion-search" >Buscar
+                        Cliente</button>
+                </div>
+            </div>
+
+            <div class="container-card">
+                <br>
+                <hr size="1px" color="grey" />
+                <p><b>Nombre del cliente:</b>  {{clientTitular.name}} </p>
+            </div>
+
+
+
+        </div>
+      
+    </div>
+</div>
