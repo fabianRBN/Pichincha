@@ -13,4 +13,8 @@ export class MovementService extends BaseHttpService{
         return this.http.get<BaseResponse>(`${this.apiUrl}/client-crud/transaction/client/${idCliente}`)
     }
 
+    getMovementfindByDateBetween(startDate: Date, endDate :Date, size:number, page:number):Observable<BaseResponse>{
+        return this.http.get<BaseResponse>(`${this.apiUrl}/client-crud/transaction/findByDateBetween?page=${page}&size=${size}&start=${startDate}&end=${endDate}`)
+    }
+
 }

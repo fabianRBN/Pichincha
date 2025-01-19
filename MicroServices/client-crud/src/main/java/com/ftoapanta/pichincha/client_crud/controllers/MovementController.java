@@ -8,6 +8,8 @@ import com.ftoapanta.pichincha.client_crud.entities.Movement;
 import com.ftoapanta.pichincha.client_crud.services.AccountService;
 import com.ftoapanta.pichincha.client_crud.services.MovementService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -92,6 +96,26 @@ public class MovementController {
             baseResponseDTO.setMessage(e.getMessage());
         }
 
+
+        return ResponseEntity.ok(baseResponseDTO);
+    }
+    @GetMapping("/findByDateBetween")
+    public ResponseEntity<BaseResponseDTO> findByDateBetween(@RequestParam(defaultValue = "") LocalDate start,
+                                                             @RequestParam(defaultValue = "") LocalDate end,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size)
+    {
+        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
+        try{
+            Map<String,Object> map =  movementService.findByDateBetween(start,end, PageRequest.of(page, size));
+            baseResponseDTO.setData(map.get("result"));
+            baseResponseDTO.setSuccess(true);
+            baseResponseDTO.setTotalElements((Long) map.get("total"));
+
+        }catch (Exception e){
+            baseResponseDTO.setSuccess(false);
+            baseResponseDTO.setMessage(e.getMessage());
+        }
 
         return ResponseEntity.ok(baseResponseDTO);
     }

@@ -24,6 +24,21 @@ input[type=password], select, textarea {
 }
 
 
+input[type=date], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  
+  resize: vertical;
+}
+input[type=number], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  
+  resize: vertical;
+}
+
 label {
   padding: 12px 12px 12px 0;
   display: inline-block;

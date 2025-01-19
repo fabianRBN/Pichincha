@@ -21,6 +21,13 @@ export class ReportComponent {
   private movementService = inject(MovementService)
 
   idTitular:string="";
+  movementList: AccountMovement[] =[];
+  startDate: Date = new Date();
+  endDate: Date = new Date();
+  page: number = 0;
+  size: number = 2;
+  totalElements: number = 10;
+  pages: number[] = []; 
   clientTitular: Client= {
     id: 0,
     name: '',
@@ -31,5 +38,44 @@ export class ReportComponent {
     status: false,
     password: '',
     identification: ''
+  }
+
+
+
+  getMovementfindByDateBetween(){
+    this.movementService.getMovementfindByDateBetween(this.startDate,this.endDate,this.size,this.page).subscribe(response=>{
+      console.log(response);
+      this.movementList = response.data;
+      this.totalElements = response.totalElements;
+      this.pages = Array.from(
+        { length: Math.ceil(this.totalElements / this.size) },
+        (_, i) => i
+      );
+    })
+  }
+
+  onPageChange(event: any): void {
+    this.page = event.pageIndex;
+    this.size = event.pageSize;
+    this.getMovementfindByDateBetween();
+  }
+
+  goToPage(page: number): void {
+    this.page = page;
+    this.getMovementfindByDateBetween();
+  }
+
+  nextPage(): void {
+    if (this.page < this.pages.length - 1) {
+      this.page++;
+      this.getMovementfindByDateBetween();
+    }
+  }
+
+  previousPage(): void {
+    if (this.page > 0) {
+      this.page--;
+      this.getMovementfindByDateBetween();
+    }
   }
 }

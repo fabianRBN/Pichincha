@@ -5,9 +5,9 @@ spring:
     hikari:
       connection-timeout: 20000
       maximum-pool-size: 5
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ftoapanta
+    url: jdbc:postgresql://localhost:5432/pichincha
+    username: pichincha
 
 logging:
   level:
