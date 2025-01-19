@@ -1,0 +1,156 @@
+<div class="container">
+    <div class="search">
+        <label for="search">Cliente</label>
+        <br>
+        <input type="text" name="search" placeholder="Buscar"   [(ngModel)]="clientName" (change)="getClients()" >
+        <button (click)="openModal()"  value="successful">Nuevo Cliente</button>
+    
+    </div>
+
+    <div class="container-table">
+        <div  class="search-count">
+            <select  [(ngModel)]="size" (change)="getClientsSelect()" >
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+            </select>
+        </div>
+        <table class="table" >
+            <thead>
+              <tr >
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Telefono</th>
+                <th>Genero</th>
+                <th>Edad</th>
+                <th>Direccion</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for(client of clients; track $index){
+              <tr>
+                <td>{{ client.id }}</td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.status ? 'Activo' : 'Inactivo' }}</td>
+                <td>{{ client.phoneNumber }}</td>
+                <td>{{ client.gender }}</td>
+                <td>{{ client.age }}</td>
+                <td>{{ client.address }}</td>
+                <td>
+                    <i class="sidenav-link-icon" class="fal fa-pen" (click)="openModal(client)">
+                        
+                    </i>
+                    <i class="sidenav-link-icon" class="fal fa-trash" (click)="deleteClient(client)"></i>
+                </td>
+              </tr>
+            }
+            </tbody>
+          </table>
+        
+          <!-- Paginaci�n -->
+          <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+            <button value="successful" (click)="previousPage()" [disabled]="page === 0">Anterior</button>
+            
+            @for(p of pages; track $index; let idx = $index){
+                <button class="coutPage"
+                (click)="goToPage(idx)"
+                [style.fontWeight]="page === idx ? 'bold' : 'normal'"
+                [style.background]="page === idx ? '#0f265c' : '#7d7d7d'"
+                style="margin: 0 5px;">
+                {{ idx + 1 }}
+                </button>
+            }
+            <button  value="successful" (click)="nextPage()" [disabled]="page === pages.length - 1">Siguiente</button>
+          </div>
+    </div>
+</div>
+
+
+
+
+
+<dialog  #modal id="modal">
+    <form [formGroup]="form()">
+        <div class="row">
+            <div class="col-25">
+                <label for="identification">Identificación:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="identification" formControlName="identification" placeholder="Identificación">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="name">Nombre:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="name" formControlName="name" placeholder="Nombre">
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="direction">Dirección:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="direction" formControlName="address" placeholder="Dirección">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="age">Edad:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="age" formControlName="age" placeholder="Edad">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="phone">Teléfono:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="phone" formControlName="phoneNumber" placeholder="Teléfono">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="gender">Genero:</label>
+            </div>
+            <div class="col-75">
+                <select id="gender" formControlName="gender">
+                    <option value="M">MASCULINO</option>
+                    <option value="F">FEMENINO</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="password">Contraña</label>
+            </div>
+            <div class="col-75">
+                <input type="password" id="password" formControlName="password" placeholder="Contraseña">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="rpassword">Repetir Contraña</label>
+            </div>
+            <div class="col-75">
+                <input type="password" id="rpassword" formControlName="rpassword" placeholder="Repetir Contraseña">
+            </div>
+        </div>
+        <div class="row">
+            <button onclick="window.modal.close();" type="button" value="close">Cerrar</button>
+            @if(updateClient){
+                <button type="button" (click)="createOrUpdateClient()" value="successful">Actualizar</button>
+            }@else{
+                <button type="button" (click)="createOrUpdateClient()" value="successful">Guardar</button>
+            }
+            
+          
+        </div>
+    </form>
+</dialog>

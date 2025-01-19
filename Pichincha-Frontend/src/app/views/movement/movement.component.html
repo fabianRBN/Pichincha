@@ -1,0 +1,145 @@
+<div class="container">
+
+    <div class="search-account">
+        <label for="search">Movimientos</label>
+        <br>
+
+    </div>
+
+    <div class="container-card-items">
+
+        <div class="card">
+            <div class="search-account">
+                <label for="search">Titular</label>
+                <br>
+                <div>
+                    <input class="input-account" type="text" name="search" [(ngModel)]="idTitular" placeholder="Buscar">
+                    <button value="successful" class="buttion-search" (click)="findClientByIdentification()">Buscar
+                        Cliente</button>
+                </div>
+            </div>
+
+            <div class="container-card">
+                <br>
+                <hr size="1px" color="grey" />
+                <p><b>Nombre del cliente:</b>  {{clientTitular.name}} </p>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="operationType">Operacion:</label>
+                </div>
+                <div class="col-75">
+                    <select id="operationType" [(ngModel)]="operationType">
+                        <option value="D">Deposito</option>
+                        <option value="T">Transferencia</option>
+                        <option value="R">Retiro</option>
+                    </select>
+                </div>
+            </div>
+
+            <form [formGroup]="form()">
+                <div class="row">
+                    <div class="col-25">
+                        <label for="accountOrg">Cuentas:</label>
+                    </div>
+                    <div class="col-75">
+                        <select id="accountOrg" formControlName="accountOrg">
+                            @for(account of accountsTitular;track $index){
+                                <option [value]="account.id">{{account.accountNumber}}  - ${{account.initialBalance}}</option>
+                            }
+                           
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="valueDep">Valor:</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="valueDep" formControlName="valueDep" placeholder="Valor">
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" value="successful" (click)="createMovement()">Transferir</button>
+                </div>
+            </form>
+        </div>
+
+        @if(operationType == 'T'){
+            <div class="card">
+                <div class="search-account">
+                    <label for="search">Beneficiario</label>
+                    <br>
+                    <div>
+                        <input class="input-account" type="text" name="search" [(ngModel)]="idBeneficiary" placeholder="Buscar">
+                        <button value="successful" class="buttion-search" (click)="findClientByIdentificationBen()">Buscar Cliente</button>
+                    </div>
+                </div>
+    
+                <div class="container-card">
+                    <br>
+                    <hr size="1px" color="grey" />
+                    <p><b>Nombre del cliente: </b>{{clientBeneficiary.name}} </p>
+                </div>
+                <form [formGroup]="formBen()">
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="accountBen">Cuentas:</label>
+                        </div>
+                        <div class="col-75">
+                            <select id="accountBen" formControlName="accountBen">
+                                @for(account of accountsBenficiary;track $index){
+                                    <option [value]="account.id">{{account.accountNumber}} - ${{account.initialBalance}} </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+    
+                </form>
+    
+            </div>
+        }
+        
+
+      
+    </div>
+
+    <br><br>
+
+    <div class="container-table">
+    
+        <table class="table" >
+            <thead>
+              <tr >
+                <th>Cuenta</th>
+                <th>Tipo de cuenta</th>
+                <th>Estado</th>
+                
+                <th>Cliente</th>
+                <th>Saldo Inicial</th>
+                <th>Movimiento</th>
+                <th>Saldo Disponible</th>         
+              </tr>
+            </thead>
+            <tbody>
+              @for(movement of movementsList; track $index){
+              <tr>
+                <td>{{ movement.numeroCuenta }}</td>
+                <td>{{ movement.tipo }}</td>
+                <td>{{ movement.estado ? 'Activo' : 'Inactivo' }}</td>
+                
+                <td>{{ movement.cliente }}</td>
+                <td>{{ movement.saldoInicial }}</td>
+                <td>{{ movement.movimiento }}</td>
+                <td>{{ movement.saldoDisponible }}</td>
+
+              </tr>
+            }
+            </tbody>
+          </table>
+        
+
+    </div>
+
+</div>

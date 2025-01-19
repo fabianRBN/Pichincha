@@ -1,0 +1,114 @@
+<div class="container">
+    <div class="search">
+        <label for="search">Cuentas</label>
+        <br>
+        <input type="text" name="search" placeholder="Buscar"   [(ngModel)]="clientName"  >
+        <button   value="successful" class="buttion-search" (click)="findClientByIdentification()">Buscar Cliente</button>
+    
+    </div>
+    @if(client.id != 0){
+        <div class="container-card-items">
+
+            <div class="card">
+                <img src="profile.webp" alt="Avatar" class="img-card">
+                <div class="container-card">
+                  <h4><b>{{client.name}}</b></h4> 
+                  <p>Id: {{client.identification}}</p> 
+                  <p>Direccion: {{client.address}}</p> 
+                </div>
+              </div>
+
+              <div class="card-detail">
+                <div class="container-card">
+                  <h4><b>Edad:</b> {{client.age}}</h4> 
+                  <p><b>Telefono:</b> {{client.phoneNumber}}</p> 
+                  <p><b>Direccion:</b> {{(client.status)?'ACTIVO':'INCATIVO'}}</p> 
+                  <p><b>Activos:</b> $2000,23 </p> 
+                  <p><b>Pasivos:</b> $500,12 </p> 
+                </div>
+              </div>
+        </div>
+      
+        <br><br>
+
+        <div class="account-create">
+             <button   value="successful" class="buttion" (click)="openModal()">Crear cuenta</button>
+        </div>
+    
+        <div class="container-table">
+    
+            <table class="table" >
+                <thead>
+                  <tr >
+                    <th>Cuenta</th>
+                    <th>Tipo de cuenta</th>
+                    <th>Saldo</th>
+                    <th>Estado</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for(account of accountList; track $index){
+                  <tr>
+                    <td>{{ account.accountNumber }}</td>
+                    <td>{{ account.accountType }}</td>
+                    <td>{{ account.status ? 'Activo' : 'Inactivo' }}</td>
+                    <td>{{ account.initialBalance }}</td>
+    
+                    <td style="width: 15%;">
+                        @if(account.status){
+                            <i class="sidenav-link-icon" class="fal fa-print-slash" (click)="updateAccount(account)" > Cerra cuenta</i>
+                        }
+                       
+                    </td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+            
+    
+        </div>
+          
+    }
+   
+    
+</div>
+
+<dialog  #modal id="modal">
+    <form [formGroup]="form()">
+        <div class="row">
+            <div class="col-25">
+                <label for="accountNumber">Numero de cuenta:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="accountNumber" formControlName="accountNumber" placeholder="Numero de cuenta">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="accountType">Tipo de cuenta:</label>
+            </div>
+            <div class="col-75">
+                <select id="accountType" formControlName="accountType">
+                    <option value="Ahorros">Ahorros</option>
+                    <option value="Ahorro mis decimos">Ahorro mis decimos</option>
+                    <option value="Ahorro futuro">Ahorro futuro</option>
+                    <option value="Ahorro programado">Ahorro programado</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="initialBalance">Saldo Inicial:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="initialBalance" formControlName="initialBalance" placeholder="Saldo inicial">
+            </div>
+        </div>
+        <div class="row">
+            <button onclick="window.modal.close();" type="button" value="close">Cerrar</button>
+
+                <button type="button" value="successful" (click)="createAccount()">Guardar</button>
+        </div>
+    </form>
+</dialog>

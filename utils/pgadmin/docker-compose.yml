@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+    pgadmin:
+      image: dpage/pgadmin4:8.14.0
+      restart: always
+      ports:
+        - "8089:80"
+      environment:
+        PGADMIN_DEFAULT_EMAIL: pichincha@test.com
+        PGADMIN_DEFAULT_PASSWORD: admin
