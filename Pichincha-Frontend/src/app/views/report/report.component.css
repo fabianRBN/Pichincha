@@ -1,7 +1,7 @@
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    width: 40%;
+    width: 60%;
     text-align: center;
     margin: 0 20px;
     padding: 20px;
@@ -55,7 +55,8 @@
   }
 
   .input-account{
-    width: 60%;
+    width: 30%;
+    margin: 0 10px;
   }
 
   p{

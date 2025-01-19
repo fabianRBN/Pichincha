@@ -3,31 +3,85 @@
     <div class="search-account">
         <label for="search">Reporte</label>
         <br>
-
     </div>
-
     <div class="container-card-items">
-
         <div class="card">
             <div class="search-account">
-                <label for="search">Cliente</label>
+                <label for="search">Reporte de transacciones</label>
                 <br>
                 <div>
-                    <input class="input-account" type="text" name="search" [(ngModel)]="idTitular" placeholder="Cedula del cliente">
-                    <button value="successful" class="buttion-search" >Buscar
-                        Cliente</button>
+                    <input class="input-account" type="date" name="search" [(ngModel)]="startDate"
+                        placeholder="Cedula del cliente">
+                    <input class="input-account" type="date" name="search" [(ngModel)]="endDate"
+                        placeholder="Cedula del cliente">
+                    <button value="successful" class="buttion-search"
+                        (click)="getMovementfindByDateBetween()">Buscar</button>
+                        
                 </div>
             </div>
-
             <div class="container-card">
                 <br>
                 <hr size="1px" color="grey" />
-                <p><b>Nombre del cliente:</b>  {{clientTitular.name}} </p>
+                <button value="successful" class="buttion-search"
+                        (click)="onGeneratePDF()">Generar PDF</button>
             </div>
-
-
+        </div>
+    </div>
+    <br>
+    <hr size="1px" color="grey" /><br>
+    <div class="container-table">
+        <div class="search-count">
+            <select [(ngModel)]="size" (change)="getMovementfindByDateBetween()">
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+            </select>
 
         </div>
-      
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cuenta</th>
+                    <th>Tipo de cuenta</th>
+                    <th>Estado</th>
+
+                    <th>Cliente</th>
+                    <th>Saldo Inicial</th>
+                    <th>Movimiento</th>
+                    <th>Saldo Disponible</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(movement of movementList; track $index){
+                <tr>
+                    <td>{{ movement.numeroCuenta }}</td>
+                    <td>{{ movement.tipo }}</td>
+                    <td>{{ movement.estado ? 'Activo' : 'Inactivo' }}</td>
+
+                    <td>{{ movement.cliente }}</td>
+                    <td>{{ movement.saldoInicial }}</td>
+                    <td>{{ movement.movimiento }}</td>
+                    <td>{{ movement.saldoDisponible }}</td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+        <!-- Paginación -->
+        <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+            <button value="successful" (click)="previousPage()" [disabled]="page === 0">Anterior</button>
+
+            @for(p of pages; track $index; let idx = $index){
+            <button class="coutPage" (click)="goToPage(idx)" [style.fontWeight]="page === idx ? 'bold' : 'normal'"
+                [style.background]="page === idx ? '#0f265c' : '#7d7d7d'" style="margin: 0 5px;">
+                {{ idx + 1 }}
+            </button>
+            }
+            <button value="successful" (click)="nextPage()" [disabled]="page === pages.length - 1">Siguiente</button>
+        </div>
+
     </div>
+
 </div>

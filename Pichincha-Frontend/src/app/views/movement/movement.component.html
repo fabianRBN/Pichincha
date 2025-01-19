@@ -57,7 +57,7 @@
                         <label for="valueDep">Valor:</label>
                     </div>
                     <div class="col-75">
-                        <input type="text" id="valueDep" formControlName="valueDep" placeholder="Valor">
+                        <input type="number" id="valueDep" formControlName="valueDep" placeholder="Valor">
                     </div>
                 </div>
                 <div class="row">
@@ -108,6 +108,12 @@
     <br><br>
 
     <div class="container-table">
+        <div class="search-account">
+            <div>
+               
+                <button value="successful" class="buttion" (click)="onGeneratePDF()">Generar PDF</button>
+            </div>
+        </div>
     
         <table class="table" >
             <thead>

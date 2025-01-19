@@ -55,11 +55,17 @@ public class ClientController {
     public ResponseEntity<BaseResponseDTO> readAll(@RequestParam(defaultValue = "0") int page,
                                                    @RequestParam(defaultValue = "10") int size) {
 
-        Page<Client> clientList = clientService.readAll( PageRequest.of(page, size));
         BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-        baseResponseDTO.setData(ResponseMap.getInstance().clientMapResponse(clientList));
-        baseResponseDTO.setSuccess(true);
-        baseResponseDTO.setTotalElements(clientList.getTotalElements());
+        try {
+            Page<Client> clientList = clientService.readAll( PageRequest.of(page, size));
+            baseResponseDTO.setData(ResponseMap.getInstance().clientMapResponse(clientList));
+            baseResponseDTO.setSuccess(true);
+            baseResponseDTO.setTotalElements(clientList.getTotalElements());
+        }catch (Exception e) {
+            baseResponseDTO.setSuccess(false);
+            baseResponseDTO.setMessage(e.getMessage());
+        }
+
         return ResponseEntity.ok(baseResponseDTO);
     }
 
