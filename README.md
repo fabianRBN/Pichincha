@@ -10,6 +10,9 @@ Este proyecto es un sistema que permite realizar operaciones de clientes, cuenta
 
 
 Este repositorio contiene un sistema desarrollado para la gestión de clientes, cuentas bancarias y movimientos financieros, simulando un módulo de ahorros.
+## Manual de usuario 
+Se publica el manual de usuario del presente sistema:
+[Ver Manual](Documentacion/MANUAL%20SISTEMA%20PICHINCHA.pdf)
 
 ## Características
 - **Clientes:**
