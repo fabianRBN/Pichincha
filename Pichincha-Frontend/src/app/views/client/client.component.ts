@@ -27,15 +27,15 @@ export class ClientComponent {
 
   form = signal<FormGroup>(
     new FormGroup({
-      name: new FormControl('',[Validators.required,Validators.minLength(20)]),
-      address: new FormControl('',[Validators.required,Validators.minLength(20)]),
+      name: new FormControl('',[Validators.required]),
+      address: new FormControl('',[Validators.required]),
       gender:new FormControl('',[Validators.required]),
       age:new FormControl('',[Validators.required]),
       phoneNumber:new FormControl('',[Validators.required]),
       status:new FormControl('',[]),
-      password:new FormControl('',[Validators.required,Validators.minLength(8)]),
-      rpassword:new FormControl('',[Validators.required,Validators.minLength(8)]),
-      identification:new FormControl('',[Validators.required,Validators.minLength(10)])
+      password:new FormControl('',[Validators.required]),
+      rpassword:new FormControl('',[Validators.required]),
+      identification:new FormControl('',[Validators.required])
     })
   )
 
@@ -90,6 +90,17 @@ export class ClientComponent {
   }
 
   createOrUpdateClient(){
+
+    if(!this.form().valid){
+      alert("Formulario no es valido o esta incompleto");
+      return;
+    }
+
+    if(this.form().controls['password'].value != this.form().controls['rpassword'].value){
+      alert("Contraseñas no son iguales");
+      return;
+    }
+
     const clientForm: Client = {
       id: 0,
       name: '',
@@ -114,13 +125,17 @@ export class ClientComponent {
     if(this.updateClient){
       console.log(clientForm)
       this.clientService.updateClient(clientForm).subscribe((response)=>{
-        console.log(response)
+        alert("Cliente Actualizado");
+        
       })
     }else{
       this.clientService.createClient(clientForm).subscribe((response)=>{
-        console.log(response)
+        alert("Cliente Registrado");
       })
     }
+
+    this.modal.nativeElement.close();
+    this.form().reset();
     
   }
 

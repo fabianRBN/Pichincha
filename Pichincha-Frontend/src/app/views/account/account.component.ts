@@ -34,9 +34,9 @@ export class AccountComponent {
 
   form = signal<FormGroup>(
     new FormGroup({
-      accountNumber:new FormControl('',[Validators.required,Validators.minLength(20)]),
-      accountType:new FormControl('',[Validators.required,Validators.minLength(20)]),
-      initialBalance:new FormControl('',[Validators.required,Validators.minLength(20)])
+      accountNumber:new FormControl('',[Validators.required]),
+      accountType:new FormControl('',[Validators.required]),
+      initialBalance:new FormControl('',[Validators.required])
     })
   )
   findClientByIdentification(){
@@ -45,6 +45,7 @@ export class AccountComponent {
         this.client = response.data;
         this.getAccountsClient();
       }else{
+        alert("Error al buscar al cliente: "+response.message);
         this.client = {
           id: 0,
           name: '',
@@ -72,6 +73,10 @@ export class AccountComponent {
     this.modal.nativeElement.showModal();
   }
   createAccount(){
+    if(!this.form().valid){
+      alert("EL formulario no es valido");
+      return;
+    }
     const account: Account = {
       id: 0,
       accountNumber: '',
@@ -87,8 +92,14 @@ export class AccountComponent {
 
     this.accounService.createAccount(account).subscribe(response=>{
       console.log(response);
-      this.getAccountsClient();
-    })
+      if(response.success){
+        this.getAccountsClient();
+      }else{
+        alert("Error al registrar cuenta:"+ response.message)
+      }
+      
+    });
+    this.modal.nativeElement.close();
 
   }
 

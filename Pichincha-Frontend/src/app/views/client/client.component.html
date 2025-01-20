@@ -2,7 +2,7 @@
     <div class="search">
         <label for="search">Cliente</label>
         <br>
-        <input type="text" name="search" placeholder="Buscar"   [(ngModel)]="clientName" (change)="getClients()" >
+        <input type="text" name="search" placeholder="Buscar por nombre de cliente"   [(ngModel)]="clientName" (change)="getClients()" >
         <button (click)="openModal()"  value="successful">Nuevo Cliente</button>
     
     </div>
@@ -50,7 +50,7 @@
             </tbody>
           </table>
         
-          <!-- Paginaci�n -->
+          <!-- Paginación -->
           <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
             <button value="successful" (click)="previousPage()" [disabled]="page === 0">Anterior</button>
             
@@ -67,10 +67,6 @@
           </div>
     </div>
 </div>
-
-
-
-
 
 <dialog  #modal id="modal">
     <form [formGroup]="form()">
@@ -104,7 +100,7 @@
                 <label for="age">Edad:</label>
             </div>
             <div class="col-75">
-                <input type="text" id="age" formControlName="age" placeholder="Edad">
+                <input type="number" id="age" formControlName="age" placeholder="Edad">
             </div>
         </div>
         <div class="row">
@@ -112,7 +108,7 @@
                 <label for="phone">Teléfono:</label>
             </div>
             <div class="col-75">
-                <input type="text" id="phone" formControlName="phoneNumber" placeholder="Teléfono">
+                <input type="number" id="phone" formControlName="phoneNumber" placeholder="Teléfono">
             </div>
         </div>
         <div class="row">
@@ -128,7 +124,7 @@
         </div>
         <div class="row">
             <div class="col-25">
-                <label for="password">Contraña</label>
+                <label for="password">Contraseña</label>
             </div>
             <div class="col-75">
                 <input type="password" id="password" formControlName="password" placeholder="Contraseña">
@@ -136,7 +132,7 @@
         </div>
         <div class="row">
             <div class="col-25">
-                <label for="rpassword">Repetir Contraña</label>
+                <label for="rpassword">Repetir Contraseña</label>
             </div>
             <div class="col-75">
                 <input type="password" id="rpassword" formControlName="rpassword" placeholder="Repetir Contraseña">
