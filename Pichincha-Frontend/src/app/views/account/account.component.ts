@@ -59,25 +59,18 @@ export class AccountComponent {
       }
     })
   }
-
-
   getAccountsClient(){
     this.accounService.getAccounts(this.client.id).subscribe((response)=>{
       console.log(response);
       this.accountList = response.data;
     })
   }
-
-
   closeModal(modal: any) {
     modal.close();
   }
-
-
   openModal() {
     this.modal.nativeElement.showModal();
   }
-
   createAccount(){
     const account: Account = {
       id: 0,
