@@ -14,6 +14,9 @@ Este repositorio contiene un sistema desarrollado para la gestión de clientes, 
 Se publica el manual de usuario del presente sistema:
 [Ver Manual](Documentacion/MANUAL%20SISTEMA%20PICHINCHA.pdf)
 
+## Archivo Postman
+Se adjunta postman file para validacion de apis 
+[Ver Archivo](Postman/PICHINCHA.postman_collection.json)
 ## Características
 - **Clientes:**
   - Consulta, registro, modificación y eliminación de clientes.
@@ -70,10 +73,10 @@ Se requiere contar con un ordenador que cuenta con:
    ```bash
    git clone https://github.com/fabianRBN/Pichincha.git
    ```
-2. Configura la base de datos:
-   - Crea una base de datos con el nombre especificado en el archivo de configuración.
-   - Ejecuta los scripts SQL incluidos en el repositorio para inicializar las tablas.
-
+2. Acceder al directorio del proyecto
+   ```
+   cd Pichincha
+  ```
 3. Instalación y configuración del proyecto:
    ```bash
    # Docker Compose
@@ -82,7 +85,6 @@ Se requiere contar con un ordenador que cuenta con:
      docker-compose up 
 
    ```
-
 
 ## Uso
 - Accede al sistema mediante el navegador en la URL http://localhost:8080/.
