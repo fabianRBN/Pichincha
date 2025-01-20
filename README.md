@@ -91,5 +91,5 @@ Se requiere contar con un ordenador que cuenta con:
 ---
 
 **Contacto:** 
-Para dudas o soporte, contacta a [tu correo aquí].
+Para dudas o soporte, contacta a fabianRBN_95@hotmail.com.
 
