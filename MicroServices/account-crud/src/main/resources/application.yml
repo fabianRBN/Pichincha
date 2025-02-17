@@ -1,6 +1,6 @@
 spring:
   application:
-    name: client-crud
+    name: account-crud
   datasource:
     hikari:
       connection-timeout: 20000
@@ -19,9 +19,9 @@ logging:
           sql:
           BasicBinder: TRACE
 server:
-  port: 8081
+  port: 8082
   servlet:
-    context-path: /client-crud
+    context-path: /account-crud
 
 eureka:
   instance:

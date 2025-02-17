@@ -1,14 +1,13 @@
-package com.ftoapanta.pichincha.client_crud.controllers;
+package com.ftoapanta.pichincha.account_crud.controllers;
 
-import com.ftoapanta.pichincha.client_crud.dto.BaseResponseDTO;
-import com.ftoapanta.pichincha.client_crud.dto.MovementResponseDTO;
-import com.ftoapanta.pichincha.client_crud.dto.MovementResquestDTO;
-import com.ftoapanta.pichincha.client_crud.entities.Account;
-import com.ftoapanta.pichincha.client_crud.entities.Movement;
-import com.ftoapanta.pichincha.client_crud.services.AccountService;
-import com.ftoapanta.pichincha.client_crud.services.MovementService;
+import com.ftoapanta.pichincha.account_crud.dto.BaseResponseDTO;
+import com.ftoapanta.pichincha.account_crud.dto.MovementResponseDTO;
+import com.ftoapanta.pichincha.account_crud.dto.MovementResquestDTO;
+import com.ftoapanta.pichincha.account_crud.entities.Account;
+import com.ftoapanta.pichincha.account_crud.entities.Movement;
+import com.ftoapanta.pichincha.account_crud.services.AccountService;
+import com.ftoapanta.pichincha.account_crud.services.MovementService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

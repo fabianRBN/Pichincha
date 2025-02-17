@@ -1,11 +1,11 @@
-package com.ftoapanta.pichincha.client_crud.controllers;
+package com.ftoapanta.pichincha.account_crud.controllers;
 
-import com.ftoapanta.pichincha.client_crud.dto.AccountRequestDTO;
-import com.ftoapanta.pichincha.client_crud.dto.BaseResponseDTO;
-import com.ftoapanta.pichincha.client_crud.entities.Account;
-import com.ftoapanta.pichincha.client_crud.entities.Client;
-import com.ftoapanta.pichincha.client_crud.services.AccountService;
-import com.ftoapanta.pichincha.client_crud.services.ClientService;
+import com.ftoapanta.pichincha.account_crud.dto.AccountRequestDTO;
+import com.ftoapanta.pichincha.account_crud.dto.BaseResponseDTO;
+import com.ftoapanta.pichincha.account_crud.entities.Account;
+import com.ftoapanta.pichincha.account_crud.entities.Client;
+import com.ftoapanta.pichincha.account_crud.services.AccountService;
+import com.ftoapanta.pichincha.account_crud.services.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -44,16 +44,12 @@ public class AccountController {
                     .initialBalance(accountRequestDTO.getInitialBalance())
                     .client(client )
                     .build();
-
             baseResponseDTO.setData(accountService.createAccount(account));
             baseResponseDTO.setSuccess(true);
         }catch (Exception e){
             baseResponseDTO.setSuccess(Boolean.FALSE);
             baseResponseDTO.setMessage(e.getMessage());
         }
-
-
-
         return ResponseEntity.ok(baseResponseDTO);
     }
 
@@ -91,18 +87,12 @@ public class AccountController {
                 account.get().setId(accountId);
                 accountService.update(accountId, account.get());
             }
-
-
-
             baseResponseDTO.setData(accountService.createAccount(account.orElse(null)));
             baseResponseDTO.setSuccess(true);
         }catch (Exception e){
             baseResponseDTO.setSuccess(Boolean.FALSE);
             baseResponseDTO.setMessage(e.getMessage());
         }
-
-
-
         return ResponseEntity.ok(baseResponseDTO);
     }
 }
