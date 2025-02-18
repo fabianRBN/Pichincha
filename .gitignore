@@ -1,0 +1,62 @@
+# Archivos de Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Archivos de Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Configuración del IDE
+*.iml
+.idea/
+*.class
+*.log
+*.swp
+*.swo
+*.swn
+.vscode/
+*.bak
+*.tmp
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.~lock.*
+*.log
+
+# Configuración de entornos
+.env
+application.properties
+application.yml
+application-*.properties
+application-*.yml
+
+# Claves y certificados
+*.jks
+*.p12
+*.keystore
+*.pem
+*.crt
+*.key
+
+# Logs
+logs/
+*.log
+!src/main/resources/logback.xml
+
+# Caché de dependencias
+.mvn/
+node_modules/
+.npm/
+.yarn/
+
+# Docker y Kubernetes
+docker-compose.override.yml
+.dockerignore
+kubectl.yml
