@@ -45,7 +45,7 @@ services:
         - '8082:8082'
     angular:
       build:
-        context: ./pichincha-Frontend
+        context: ./../pichincha-Frontend
         dockerfile: Dockerfile
       container_name: pichincha-frontend
       ports:
@@ -58,13 +58,11 @@ services:
       container_name: db-pichincha
       restart: always
       volumes:
-        - ./sql/create_schema_bp.sql:/docker-entrypoint-initdb.d/create_schema.sql
-        - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+        - ./../sql/create_schema_bp.sql:/docker-entrypoint-initdb.d/create_schema.sql
+        - ./../sql/data.sql:/docker-entrypoint-initdb.d/data.sql
       environment:
         POSTGRES_DB: 'pichincha'
         POSTGRES_USER: 'pichincha'
         POSTGRES_PASSWORD: 'ftoapanta'
       ports:
         - '5432:5432'
-      depends_on:
-        - kafka
