@@ -23,7 +23,8 @@ public class ClientServiceImpl implements ClientService {
     public Client create(Client client) {
         personRepository.findById(client.getPerson().getId())
                 .orElseThrow(() -> new NoSuchElementException("Person not found with id: " + client.getPerson().getId()));
-        return clientRepository.save(client);
+        Client savedClient = clientRepository.save(client);
+        return savedClient;
     }
 
     public Client update(Long id, Client client) {
@@ -56,6 +57,8 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findByPersonIdentification(identification)
                 .orElseThrow(() -> new NoSuchElementException("Client not found with identification: " + identification));
     }
+
+
 
 
 }

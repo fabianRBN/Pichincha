@@ -2,144 +2,79 @@ package com.ftoapanta.pichincha.client_crud.controllers;
 
 import com.ftoapanta.pichincha.client_crud.dto.BaseResponseDTO;
 import com.ftoapanta.pichincha.client_crud.dto.ClientRequestDTO;
-import com.ftoapanta.pichincha.client_crud.dto.ClientResponseDTO;
 import com.ftoapanta.pichincha.client_crud.entities.Client;
-import com.ftoapanta.pichincha.client_crud.entities.Person;
 import com.ftoapanta.pichincha.client_crud.services.ClientService;
-import com.ftoapanta.pichincha.client_crud.services.PersonService;
-import com.ftoapanta.pichincha.client_crud.utils.ResponseMap;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "client")
 @CrossOrigin
+@Validated
 public class ClientController {
     private final ClientService clientService;
-    private final PersonService personService;
 
     @PostMapping
-    public ResponseEntity<Client> create(@RequestBody ClientRequestDTO clientRequestDTO) {
-
-        Person person = Person.builder()
-                .name(clientRequestDTO.getName())
-                .age(clientRequestDTO.getAge())
-                .address(clientRequestDTO.getAddress())
-                .gender(clientRequestDTO.getGender())
-                .identification(clientRequestDTO.getIdentification())
-                .phoneNumber(clientRequestDTO.getPhoneNumber())
-                .build();
-        person = personService.create(person);
-        Client client = Client.builder()
-                .person(person)
-                .password(clientRequestDTO.getPassword())
-                .status(true)
-                .build();
-
+    public ResponseEntity<BaseResponseDTO> create( @Valid @RequestBody ClientRequestDTO client) {
+        log.info("Creando cliente con identificación: {}", client.getIdentification());
         return ResponseEntity.status(HttpStatus.CREATED).body(clientService.create(client));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Client> readById(@PathVariable Long id) {
+        log.info("Buscando cliente con ID: {}", id);
         return ResponseEntity.ok(clientService.readById(id));
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponseDTO> readAll(@RequestParam(defaultValue = "0") int page,
-                                                   @RequestParam(defaultValue = "10") int size) {
-
-        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-        try {
-            Page<Client> clientList = clientService.readAll( PageRequest.of(page, size));
-            baseResponseDTO.setData(ResponseMap.getInstance().clientMapResponse(clientList));
-            baseResponseDTO.setSuccess(true);
-            baseResponseDTO.setTotalElements(clientList.getTotalElements());
-        }catch (Exception e) {
-            baseResponseDTO.setSuccess(false);
-            baseResponseDTO.setMessage(e.getMessage());
-        }
-
-        return ResponseEntity.ok(baseResponseDTO);
+    public ResponseEntity<BaseResponseDTO> readAll(
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0, message = "La página no puede ser menor que 0") int page,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "El tamaño debe ser al menos 1")
+            @Max(value = 100, message = "El tamaño no puede ser mayor que 100") int size) {
+        log.info("Obteniendo lista de clientes - Página: {}, Tamaño: {}", page, size);
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(clientService.readAll(pageable));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> update(@PathVariable Long id, @RequestBody ClientRequestDTO clientRequestDTO) {
-
-        Person person = Person.builder()
-                .name(clientRequestDTO.getName())
-                .age(clientRequestDTO.getAge())
-                .address(clientRequestDTO.getAddress())
-                .gender(clientRequestDTO.getGender())
-                .identification(clientRequestDTO.getIdentification())
-                .phoneNumber(clientRequestDTO.getPhoneNumber())
-                .build();
-        Client client = Client.builder()
-                .person(person)
-                .password(clientRequestDTO.getPassword())
-                .status(true)
-                .build();
-        client = clientService.update(id, client);
-        personService.update(client.getPerson().getId(), person);
-
+    public ResponseEntity<BaseResponseDTO> update(@PathVariable Long id, @Valid @RequestBody ClientRequestDTO client) {
+        log.info("Actualizando cliente con ID: {}", id);
         return ResponseEntity.ok(clientService.update(id, client));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("Eliminando cliente con ID: {}", id);
         clientService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<BaseResponseDTO> searchClients(
-            @RequestParam("name") String name,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
-
+    public ResponseEntity<BaseResponseDTO> searchClients(@RequestParam("name") String name,
+                                                         @RequestParam(defaultValue = "0")
+                                                         @Min(value = 0, message = "La página no puede ser menor que 0") int page,
+                                                         @RequestParam(defaultValue = "10") @Min(value = 1, message = "El tamaño debe ser al menos 1")
+                                                             @Max(value = 100, message = "El tamaño no puede ser mayor que 100") int size) {
+        log.info("Buscando clientes por nombre: {}", name);
         Pageable pageable = PageRequest.of(page, size);
-        Page<Client> clients = clientService.searchClientsByName(name, pageable);
-        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-        baseResponseDTO.setData(ResponseMap.getInstance().clientMapResponse(clients));
-        baseResponseDTO.setTotalElements(clients.getTotalElements());
-        baseResponseDTO.setSuccess(!clients.isEmpty());
-        return ResponseEntity.ok(baseResponseDTO);
+        return ResponseEntity.ok(clientService.searchClientsByName(name, pageable));
     }
 
     @GetMapping("/findByPersonIdentification")
-    public ResponseEntity<BaseResponseDTO> findByPersonIdentification(@RequestParam("identification") String identification) {
-
-        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-
-        try{
-            Client client = clientService.findByPersonIdentification(identification);
-            ClientResponseDTO clientResponseDTO = ClientResponseDTO.builder()
-                    .identification(client.getPerson().getIdentification())
-                    .age(client.getPerson().getAge())
-                    .status(client.getStatus())
-                    .name(client.getPerson().getName())
-                    .phoneNumber(client.getPerson().getPhoneNumber())
-                    .gender(client.getPerson().getGender())
-                    .address(client.getPerson().getAddress())
-                    .id(client.getId())
-                    .build();
-
-
-            baseResponseDTO.setData(clientResponseDTO);
-            baseResponseDTO.setSuccess(true);
-        }catch (Exception e){
-            baseResponseDTO.setData(null);
-            baseResponseDTO.setSuccess(false);
-            baseResponseDTO.setMessage(e.getMessage());
-        }
-
-
-        return ResponseEntity.ok(baseResponseDTO);
+    public ResponseEntity<Client> findByPersonIdentification(@RequestParam("identification") String identification) {
+        log.info("Buscando cliente con identificación: {}", identification);
+        return ResponseEntity.ok(clientService.findByPersonIdentification(identification));
     }
 }

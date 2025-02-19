@@ -7,9 +7,14 @@ import com.ftoapanta.pichincha.account_crud.entities.Account;
 import com.ftoapanta.pichincha.account_crud.entities.Movement;
 import com.ftoapanta.pichincha.account_crud.services.AccountService;
 import com.ftoapanta.pichincha.account_crud.services.MovementService;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +33,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @CrossOrigin
 @RequestMapping(path = "transaction")
+@Validated
 public class MovementController {
     private final MovementService movementService;
     private final AccountService accountService;
@@ -35,48 +41,7 @@ public class MovementController {
     @PostMapping
     public ResponseEntity<BaseResponseDTO> createTransaction(@RequestBody MovementResquestDTO movementResquestDTO) {
 
-        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-        Optional<Account> account = accountService.getAccountById(movementResquestDTO.getAccountId());
-        if(account.isPresent()) {
-            Double monto = account.get().getInitialBalance() + movementResquestDTO.getValue();
-
-            if(monto < 0 ){
-                baseResponseDTO.setSuccess(false);
-                baseResponseDTO.setMessage("Invalid balance");
-                return ResponseEntity.ok(baseResponseDTO);
-            }
-
-            if( movementResquestDTO.getValue() == 0){
-                baseResponseDTO.setSuccess(false);
-                baseResponseDTO.setMessage("Value cannot be zero");
-                return ResponseEntity.ok(baseResponseDTO);
-            }
-
-
-
-            if(movementResquestDTO.getValue() > 0){
-                movementResquestDTO.setTransactionType("C");
-            }else{
-                movementResquestDTO.setTransactionType("D");
-            }
-            Movement movement = Movement.builder()
-                    .date(LocalDate.now())
-                    .value(movementResquestDTO.getValue())
-                    .transactionType(movementResquestDTO.getTransactionType())
-                    .available(monto)
-                    .account(account.get())
-                    .balance(account.get().getInitialBalance())
-                    .build();
-
-            baseResponseDTO.setData(movementService.createTransaction(movement));
-
-            account.get().setInitialBalance(account.get().getInitialBalance() + movementResquestDTO.getValue());
-            account.get().setInitialBalance(monto);
-            accountService.update(account.get().getId(),account.get());
-
-            baseResponseDTO.setSuccess(true);
-        }
-        return ResponseEntity.ok(baseResponseDTO);
+        return ResponseEntity.ok(movementService.createTransaction(movementResquestDTO));
     }
     @GetMapping("/account/{accountId}")
     public ResponseEntity<List<Movement>> getMovementsByAccountId(@PathVariable Long accountId) {
@@ -99,10 +64,24 @@ public class MovementController {
         return ResponseEntity.ok(baseResponseDTO);
     }
     @GetMapping("/findByDateBetween")
-    public ResponseEntity<BaseResponseDTO> findByDateBetween(@RequestParam(defaultValue = "") LocalDate start,
-                                                             @RequestParam(defaultValue = "") LocalDate end,
-                                                             @RequestParam(defaultValue = "0") int page,
-                                                             @RequestParam(defaultValue = "10") int size)
+    public ResponseEntity<BaseResponseDTO> findByDateBetween(@RequestParam(required = false)
+                                                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                                 @PastOrPresent(message = "La fecha de inicio no puede ser futura.")
+                                                                 LocalDate start,
+
+                                                             @RequestParam(required = false)
+                                                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
+
+                                                                 LocalDate end,
+
+                                                             @RequestParam(defaultValue = "0")
+                                                                 @Min(value = 0, message = "El número de página no puede ser negativo.")
+                                                                 int page,
+
+                                                             @RequestParam(defaultValue = "10")
+                                                                 @Min(value = 1, message = "El tamaño de página debe ser al menos 1.")
+                                                                 @Max(value = 100, message = "El tamaño de página no puede superar 100.")
+                                                                 int size)
     {
         BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
         try{

@@ -6,7 +6,9 @@ import com.ftoapanta.pichincha.account_crud.entities.Account;
 import com.ftoapanta.pichincha.account_crud.entities.Client;
 import com.ftoapanta.pichincha.account_crud.services.AccountService;
 import com.ftoapanta.pichincha.account_crud.services.ClientService;
+import com.ftoapanta.pichincha.account_crud.strem.ClientCache;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,40 +25,24 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @CrossOrigin
+@Slf4j
 @RequestMapping(path = "account")
 public class AccountController {
 
     private final AccountService accountService;
 
     private final ClientService clientService;
+    private final ClientCache clientCache;
 
     @PostMapping
     public ResponseEntity<BaseResponseDTO> createAccount(@RequestBody AccountRequestDTO accountRequestDTO) {
-
-        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-        try{
-            Client client = clientService.readById(accountRequestDTO.getClientId());
-
-            Account account = Account.builder()
-                    .status(true)
-                    .accountNumber(accountRequestDTO.getAccountNumber())
-                    .accountType(accountRequestDTO.getAccountType())
-                    .initialBalance(accountRequestDTO.getInitialBalance())
-                    .client(client )
-                    .build();
-            baseResponseDTO.setData(accountService.createAccount(account));
-            baseResponseDTO.setSuccess(true);
-        }catch (Exception e){
-            baseResponseDTO.setSuccess(Boolean.FALSE);
-            baseResponseDTO.setMessage(e.getMessage());
-        }
-        return ResponseEntity.ok(baseResponseDTO);
+        log.info("Creando createAccount: {}", accountRequestDTO);
+        return ResponseEntity.ok(accountService.createAccount(accountRequestDTO));
     }
 
     @GetMapping("/client/{clientId}")
     public ResponseEntity<BaseResponseDTO> getAccountsByClientId(@PathVariable Long clientId) {
         BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-
         try{
             baseResponseDTO.setData(accountService.getAccountsByClientId(clientId));
             baseResponseDTO.setSuccess(true);
@@ -78,21 +64,7 @@ public class AccountController {
     @PutMapping("/{accountId}")
     public ResponseEntity<BaseResponseDTO> updateAccount(@PathVariable Long accountId,@RequestBody AccountRequestDTO accountRequestDTO) {
 
-        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-        try{
-            Optional<Account> account = accountService.getAccountById(accountId);
 
-            if(account.isPresent()){
-                account.get().setStatus(false);
-                account.get().setId(accountId);
-                accountService.update(accountId, account.get());
-            }
-            baseResponseDTO.setData(accountService.createAccount(account.orElse(null)));
-            baseResponseDTO.setSuccess(true);
-        }catch (Exception e){
-            baseResponseDTO.setSuccess(Boolean.FALSE);
-            baseResponseDTO.setMessage(e.getMessage());
-        }
-        return ResponseEntity.ok(baseResponseDTO);
+        return ResponseEntity.ok(accountService.update(accountId, accountRequestDTO));
     }
 }

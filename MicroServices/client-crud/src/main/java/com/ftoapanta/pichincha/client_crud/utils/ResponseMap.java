@@ -38,4 +38,18 @@ public class ResponseMap {
 
         return clientResponseDTOList;
     }
+    public ClientResponseDTO clientResponse(Client client){
+        ClientResponseDTO clientResponseDTO = new ClientResponseDTO();
+        clientResponseDTO.setId(client.getId());
+        clientResponseDTO.setName(client.getPerson().getName());
+        clientResponseDTO.setAddress(client.getPerson().getAddress());
+        clientResponseDTO.setGender(client.getPerson().getGender());
+        clientResponseDTO.setAge(client.getPerson().getAge());
+        clientResponseDTO.setPhoneNumber(client.getPerson().getPhoneNumber());
+        clientResponseDTO.setStatus(client.getStatus());
+        clientResponseDTO.setIdentification(client.getPerson().getIdentification());
+
+
+        return clientResponseDTO;
+    }
 }
